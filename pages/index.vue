@@ -125,7 +125,7 @@
 <script>
   useHead({
     bodyAttrs:{
-      class: 'bg-slate-950 flex justify-center'
+      class: 'bg-slate-950 sm:flex justify-center'
     }
   })
 
