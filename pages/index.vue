@@ -22,7 +22,10 @@
       </form> -->
       <div class="flex flex-col flex-grow__ min-h-full" v-show="supportType == 'chat'">
         <div class="flex mx-8 py-4">
-          <img class="h-12 rounded-full sm:mx-0 sm:shrink-0" src="/keme.png">
+          <div class="relative">
+            <img class="h-12 rounded-full sm:mx-0 sm:shrink-0" src="/keme.png">
+            <span class="absolute right-0 bottom-0 w-3 h-3 bg-green-500 rounded-full"></span>
+          </div>
           <div class="ml-3">
             <p class="text-white">Mutty</p>
             <p class="text-green-500 text-xs">Customer Care</p>
@@ -166,7 +169,4 @@
     }
   }
 
-
-  
- 
 </script>
