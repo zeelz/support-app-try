@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-screen sm:w-[30rem] bg-[#002866]">
+  <div class="flex flex-col max-h-screen sm:w-[30rem] bg-[#002866]" :class="{'h-screen': supportType == 'call'}">
     
     <div class="flex justify-center mx-8 py-4">
       <ArrowSmallLeftIcon class="h-6 w-6 text-white font-extrabold mr-auto" />
@@ -65,7 +65,7 @@
             <p class="basis-full text-left text-xs text-green-500 py-2 lowercase">7:12pm</p>
           </div>
 
-          <ul>
+          <ul ref="chatWrapper">
             <li v-for="i in cities" :key="i.id" class="">
               <div class="flex flex-wrap" :class="{'justify-end': i.sender == 'customer'}">
                 <p :class="{'bg-green-400 text-blue-900': i.sender == 'customer', 'bg-blue-900 text-slate-300': i.sender == 'agent'}" class="p-3 rounded-2xl text-sm">{{i.name}}</p>
@@ -76,7 +76,7 @@
 
         </div>
 
-        <form v-on:submit.prevent="sender($event, scrollDown)" class="flex justify-between items-center px-3 py-4">
+        <form v-on:submit.prevent="sender" class="flex justify-between items-center px-3 py-4">
           <input type="text" v-model="msg" class="w-full bg-[#001433] text-slate-300 text-sm rounded-2xl p-3 placeholder:text-sm" placeholder="Type a message">
           <button type="submit" class="bg-green-400 hover:bg-green-500 rounded-full p-2 ml-2">
             <ArrowSmallUpIcon class="h-4 w-4 text-blue-900" />
@@ -84,39 +84,38 @@
         </form>
       </div>
 
-
       <div class="flex flex-col flex-grow mx-8" v-show="supportType == 'call'">
-        <h1 class="text-xl text-white font-medium py-3">Start a call</h1>
-
-        <a  href="tel://08039973902" class="flex items-center text-left p-4 mb-2 bg-blue-800 rounded-xl">
-          <PhoneArrowUpRightIcon class="h-6 w-6 text-green-500" />
-          <div class="ml-3">
-            <p class="text-white">Chinedu</p>
-            <p class="text-white text-xs">08039973902</p>
-          </div>
-        </a>
-        <a  href="tel://08039973924" class="flex items-center text-left p-4 mb-2 bg-blue-800 rounded-xl">
-          <PhoneArrowUpRightIcon class="h-6 w-6 text-green-500" />
-          <div class="ml-3">
-            <p class="text-white">Tope</p>
-            <p class="text-white text-xs">08039973924</p>
-          </div>
-        </a>
-        <a  href="tel://09189979317" class="flex items-center text-left p-4 mb-2 bg-blue-800 rounded-xl">
-          <PhoneArrowUpRightIcon class="h-6 w-6 text-green-500" />
-          <div class="ml-3">
-            <p class="text-white">Mohammed</p>
-            <p class="text-white text-xs">09189979317</p>
-          </div>
-        </a>
-        <a href="tel://08087373909" class="flex items-center text-left p-4 mb-2 bg-blue-800 rounded-xl">
-          <PhoneArrowUpRightIcon class="h-6 w-6 text-green-500" />
-          <div class="ml-3">
-            <p class="text-white">Benita</p>
-            <p class="text-white text-xs">08087373909</p>
-          </div>
-        </a>
-      </div>
+          <h1 class="text-xl text-white font-medium py-3">Start a call</h1>
+  
+          <a  href="tel://08039973902" class="flex items-center text-left p-4 mb-2 bg-blue-800 rounded-xl">
+            <PhoneArrowUpRightIcon class="h-6 w-6 text-green-500" />
+            <div class="ml-3">
+              <p class="text-white">Chinedu</p>
+              <p class="text-white text-xs">08039973902</p>
+            </div>
+          </a>
+          <a  href="tel://08039973924" class="flex items-center text-left p-4 mb-2 bg-blue-800 rounded-xl">
+            <PhoneArrowUpRightIcon class="h-6 w-6 text-green-500" />
+            <div class="ml-3">
+              <p class="text-white">Tope</p>
+              <p class="text-white text-xs">08039973924</p>
+            </div>
+          </a>
+          <a  href="tel://09189979317" class="flex items-center text-left p-4 mb-2 bg-blue-800 rounded-xl">
+            <PhoneArrowUpRightIcon class="h-6 w-6 text-green-500" />
+            <div class="ml-3">
+              <p class="text-white">Mohammed</p>
+              <p class="text-white text-xs">09189979317</p>
+            </div>
+          </a>
+          <a href="tel://08087373909" class="flex items-center text-left p-4 mb-2 bg-blue-800 rounded-xl">
+            <PhoneArrowUpRightIcon class="h-6 w-6 text-green-500" />
+            <div class="ml-3">
+              <p class="text-white">Benita</p>
+              <p class="text-white text-xs">08087373909</p>
+            </div>
+          </a>
+        </div>
 
   </div>
   
@@ -148,7 +147,7 @@
     },
 
     methods: {
-      sender(e, cb){
+      sender(e){
         this.msg && this.cities.push({
           id: Math.random() * 10,
           name: this.msg,
@@ -156,12 +155,13 @@
           time: new Date(e.timeStamp + performance.timing.navigationStart).toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true})
         })
         this.msg = ''
-        cb()
+        this.scrollDown()
       },
 
       scrollDown(){
-        const chatWrapper = document.querySelector('#chatWrapper')
-        chatWrapper.scrollTop = chatWrapper.scrollHeight 
+        this.$nextTick(() => this.$refs.chatWrapper.lastElementChild.scrollIntoView())
+        // const chatWrapper = document.querySelector('#chatWrapper')
+        // chatWrapper.scrollTop = chatWrapper.scrollHeight 
       },
       setSupportType(type){
         this.supportType = type
@@ -170,3 +170,14 @@
   }
 
 </script>
+
+<style scoped>
+#chatWrapper::-webkit-scrollbar {
+  width: 0;
+}
+
+  #chatWrapper {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+</style>
